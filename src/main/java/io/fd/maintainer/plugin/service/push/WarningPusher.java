@@ -71,8 +71,8 @@ public class WarningPusher implements CommonTasks {
     public void sendWarnings(@Nonnull final Set<ComponentChangeWarning> comments,
                              @Nonnull final Change change,
                              @Nonnull final PatchSet patchSet,
-                             @Nonnull final String onBehalfOF) throws OrmException {
-        if (!comments.isEmpty()) {
+                             @Nonnull final String onBehalfOf) throws OrmException {
+        if (comments.isEmpty()) {
             LOG.warn("No warnings");
             return;
         }
@@ -83,7 +83,7 @@ public class WarningPusher implements CommonTasks {
 
             ReviewInput review = ReviewInput.dislike()
                     .message(formatComments(comments));// review -1
-            review.onBehalfOf = onBehalfOF;
+            review.onBehalfOf = onBehalfOf;
 
             reviewProvider.get().apply(revisionResource, review);
         } catch (IOException | RestApiException | UpdateException e) {
