@@ -70,6 +70,10 @@ public class PluginBranchSpecificSettings {
         return branch.concat(fileRef);
     }
 
+    public String getPluginUserName() {
+        return pluginUserName;
+    }
+
     @Override
     public String toString() {
         return "PluginBranchSpecificSettings{" +

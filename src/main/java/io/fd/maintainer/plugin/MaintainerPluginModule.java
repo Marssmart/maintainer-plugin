@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 public class MaintainerPluginModule extends AbstractModule {
 
-    public static final String MAINTAINER_PLUGIN_USER = "maintainer-plugin";
     private static final Logger LOG = LoggerFactory.getLogger(MaintainerPluginModule.class);
 
     @Override

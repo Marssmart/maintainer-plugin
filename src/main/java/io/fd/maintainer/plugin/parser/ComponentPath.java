@@ -117,6 +117,29 @@ public class ComponentPath {
                 '}';
     }
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final ComponentPath that = (ComponentPath) o;
+
+        return path != null
+                ? path.equals(that.path)
+                : that.path == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return path != null
+                ? path.hashCode()
+                : 0;
+    }
+
     public enum MatchLevel {
         FULL(4), // full equality match
         WILDCARD_WITH_EXTENSION(3),// matches wildcarded path with extension for ex.: foo/bar/*.mk

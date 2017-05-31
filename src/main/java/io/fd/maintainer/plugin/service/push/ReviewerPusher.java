@@ -73,7 +73,8 @@ public class ReviewerPusher implements WarningGenerator, PatchListProcessing, Co
 
     public void addRelevantReviewers(@Nonnull final MaintainersIndex maintainersIndex,
                                      @Nonnull final Change change,
-                                     @Nonnull final PatchSet mostCurrentPatchSet) throws OrmException {
+                                     @Nonnull final PatchSet mostCurrentPatchSet,
+                                     @Nonnull final String onBehalfOf) throws OrmException {
 
         final Set<ComponentReviewInfo> reviewInfoSet =
                 getRelevantPatchListEntries(getPatchList(patchListCache, change, mostCurrentPatchSet))
@@ -96,6 +97,6 @@ public class ReviewerPusher implements WarningGenerator, PatchListProcessing, Co
 
         LOG.info("Adding reviewers for change {}", change.getId());
         addReviewers(reviewersProvider.get(), reviewersToBeAdded, changesCollection, change);
-        sendReviewersInfo(reviewInfoSet, change, changesCollection, revisions, reviewProvider.get());
+        sendReviewersInfo(reviewInfoSet, change, changesCollection, revisions, reviewProvider.get(), onBehalfOf);
     }
 }

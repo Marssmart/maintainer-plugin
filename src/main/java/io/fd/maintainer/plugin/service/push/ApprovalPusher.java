@@ -16,7 +16,6 @@
 
 package io.fd.maintainer.plugin.service.push;
 
-import static io.fd.maintainer.plugin.MaintainerPluginModule.MAINTAINER_PLUGIN_USER;
 import static java.lang.String.format;
 
 import com.google.gerrit.extensions.api.changes.ReviewInput;
@@ -35,6 +34,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import java.io.IOException;
+import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +52,9 @@ public class ApprovalPusher {
     @Inject
     private Provider<PostReview> reviewProvider;
 
-    public void approvePatchset(Change change, PatchSet patchSet) {
+    public void approvePatchset(@Nonnull final Change change,
+                                @Nonnull final PatchSet patchSet,
+                                @Nonnull final String onBehalfOf) {
         try {
             ChangeResource changeResource = changes.parse(change.getId());
             final RevisionResource revisionResource = revisions.parse(changeResource, IdString.fromUrl("current"));
@@ -63,7 +65,7 @@ public class ApprovalPusher {
                     ReviewInput.approve()
                             .message(format(" All relevant component maintainers verified patchset %s",
                                     patchSet.getPatchSetId()));// review +2
-            review.onBehalfOf = MAINTAINER_PLUGIN_USER;
+            review.onBehalfOf = onBehalfOf;
 
             post.apply(revisionResource, review);
 

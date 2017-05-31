@@ -144,11 +144,11 @@ public class OnPatchsetVerifiedListener extends SelfDescribingEventListener impl
 
                         if (patchsetReviewInfo.getReviewState() == ALL_COMPONENTS_REVIEWED) {
                             LOG.info("All relevant component reviewers verified patchset {}", currentPatchset.getId());
-                            approvalPusher.approvePatchset(change, currentPatchset);
+                            approvalPusher.approvePatchset(change, currentPatchset, settings.getPluginUserName());
 
                             if (settings.isAutoSubmit()) {
                                 LOG.info("Submitting change {}", change.getId());
-                                submitPusher.submitPatch(change);
+                                submitPusher.submitPatch(change, settings.getPluginUserName());
                             } else {
                                 LOG.warn("Auto submit turned off");
                             }

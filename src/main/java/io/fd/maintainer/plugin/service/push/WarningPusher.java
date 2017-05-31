@@ -16,7 +16,6 @@
 
 package io.fd.maintainer.plugin.service.push;
 
-import static io.fd.maintainer.plugin.MaintainerPluginModule.MAINTAINER_PLUGIN_USER;
 import static java.lang.String.format;
 
 import com.google.gerrit.extensions.api.changes.ReviewInput;
@@ -39,6 +38,7 @@ import io.fd.maintainer.plugin.util.WarningGenerator;
 import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,9 +68,10 @@ public class WarningPusher implements CommonTasks {
                 .collect(Collectors.joining(LINE_SEPARATOR));
     }
 
-    public void sendWarnings(final Set<ComponentChangeWarning> comments,
-                             final Change change,
-                             final PatchSet patchSet) throws OrmException {
+    public void sendWarnings(@Nonnull final Set<ComponentChangeWarning> comments,
+                             @Nonnull final Change change,
+                             @Nonnull final PatchSet patchSet,
+                             @Nonnull final String onBehalfOF) throws OrmException {
         if (!comments.isEmpty()) {
             LOG.warn("No warnings");
             return;
@@ -82,7 +83,7 @@ public class WarningPusher implements CommonTasks {
 
             ReviewInput review = ReviewInput.dislike()
                     .message(formatComments(comments));// review -1
-            review.onBehalfOf = MAINTAINER_PLUGIN_USER;
+            review.onBehalfOf = onBehalfOF;
 
             reviewProvider.get().apply(revisionResource, review);
         } catch (IOException | RestApiException | UpdateException e) {

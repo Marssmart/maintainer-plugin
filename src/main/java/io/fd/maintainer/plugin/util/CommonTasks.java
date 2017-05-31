@@ -17,7 +17,6 @@
 package io.fd.maintainer.plugin.util;
 
 
-import static io.fd.maintainer.plugin.MaintainerPluginModule.MAINTAINER_PLUGIN_USER;
 import static io.fd.maintainer.plugin.service.ComponentReviewInfo.ComponentReviewInfoState.COMPONENT_FOUND;
 import static io.fd.maintainer.plugin.service.ComponentReviewInfo.ComponentReviewInfoState.COMPONENT_NOT_FOUND;
 import static java.lang.String.format;
@@ -131,16 +130,17 @@ public interface CommonTasks extends WarningGenerator, PatchListProcessing {
                 .collect(toMap(entry -> entry, maintainersIndex::getComponentPathsForEntry));
     }
 
-    default void sendReviewersInfo(final Set<ComponentReviewInfo> reviewInfoSet,
-                                   final Change change,
-                                   final ChangesCollection changesCollection,
-                                   final Revisions revisions,
-                                   final PostReview reviewApi) throws OrmException {
+    default void sendReviewersInfo(@Nonnull final Set<ComponentReviewInfo> reviewInfoSet,
+                                   @Nonnull final Change change,
+                                   @Nonnull final ChangesCollection changesCollection,
+                                   @Nonnull final Revisions revisions,
+                                   @Nonnull final PostReview reviewApi,
+                                   @Nonnull final String onBehalfOf) throws OrmException {
         try {
             ChangeResource changeResource = changesCollection.parse(change.getId());
             final RevisionResource revisionResource = revisions.parse(changeResource, IdString.fromUrl("current"));
             ReviewInput review = ReviewInput.noScore().message(formatReviewerInfo(reviewInfoSet));
-            review.onBehalfOf = MAINTAINER_PLUGIN_USER;
+            review.onBehalfOf = onBehalfOf;
 
             reviewApi.apply(revisionResource, review);
         } catch (IOException | RestApiException | UpdateException e) {

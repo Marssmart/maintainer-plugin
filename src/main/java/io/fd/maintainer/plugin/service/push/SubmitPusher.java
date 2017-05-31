@@ -30,7 +30,6 @@ import com.google.gerrit.server.change.Submit;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import io.fd.maintainer.plugin.MaintainerPluginModule;
 import java.io.IOException;
 import javax.annotation.Nonnull;
 
@@ -46,9 +45,10 @@ public class SubmitPusher {
     @Inject
     private Revisions revisions;
 
-    public void submitPatch(@Nonnull final Change change) {
+    public void submitPatch(@Nonnull final Change change,
+                            @Nonnull final String onBehalfOf) {
         SubmitInput request = new SubmitInput();
-        request.onBehalfOf = MaintainerPluginModule.MAINTAINER_PLUGIN_USER;
+        request.onBehalfOf = onBehalfOf;
 
         try {
             ChangeResource changeResource = changesCollection.parse(change.getId());

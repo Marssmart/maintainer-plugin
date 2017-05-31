@@ -43,6 +43,38 @@ public class Maintainer {
                 '}';
     }
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final Maintainer that = (Maintainer) o;
+
+        if (name != null
+                ? !name.equals(that.name)
+                : that.name != null) {
+            return false;
+        }
+        return email != null
+                ? email.equals(that.email)
+                : that.email == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null
+                ? name.hashCode()
+                : 0;
+        result = 31 * result + (email != null
+                ? email.hashCode()
+                : 0);
+        return result;
+    }
+
     public static class MaintainerBuilder {
         private String name;
         private String email;

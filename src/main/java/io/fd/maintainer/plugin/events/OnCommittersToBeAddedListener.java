@@ -114,7 +114,7 @@ public class OnCommittersToBeAddedListener extends SelfDescribingEventListener i
                     new MaintainersIndex(
                             maintainersProvider.getMaintainersInfo(changeAttributes.branch, changeAttributes.number));
 
-            reviewerPusher.addRelevantReviewers(index, change, mostCurrentPatchSet);
+            reviewerPusher.addRelevantReviewers(index, change, mostCurrentPatchSet, settings.getPluginUserName());
             LOG.info("Reviewers for change {} successfully added", change.getId());
 
             final PatchList patchList = getPatchList(patchListCache, change, mostCurrentPatchSet);
@@ -125,7 +125,7 @@ public class OnCommittersToBeAddedListener extends SelfDescribingEventListener i
 
             final Set<WarningGenerator.ComponentChangeWarning> warnings =
                     generateComponentChangeWarnings(index, renamedEntryToComponentsIndex);
-            warningPusher.sendWarnings(warnings, change, mostCurrentPatchSet);
+            warningPusher.sendWarnings(warnings, change, mostCurrentPatchSet, settings.getPluginUserName());
             LOG.info("Warnings for change {} successfully added", change.getId());
         } catch (OrmException e) {
             throw new IllegalStateException("Unable to open review DB", e);
