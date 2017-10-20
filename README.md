@@ -1,3 +1,5 @@
+Moved to https://gerrit.googlesource.com/plugins/maintainer
+
 # maintainer-plugin
 Complex reviewer management for gerrit
 
